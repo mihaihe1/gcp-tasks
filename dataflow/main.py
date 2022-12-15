@@ -28,13 +28,17 @@ class Parser(beam.DoFn):
         try:
             # sp = line.split()
             timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
-            data_row = {"message": line["message"], "number_int": int(line["number_int"]),
-                        "number_float": float(line["number_float"]),
-                        "timestamp": timestamp}
+            # data_row = {"message": line["message"], "number_int": int(line["number_int"]),
+            #             "number_float": float(line["number_float"]),
+            #             "timestamp": timestamp}
+            data_row = {"message": "test", "number_int": "1",
+                        "number_float": "2",
+                        "timestamp": "2022-12-15"}
             yield data_row
         except Exception as error:
             timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
-            error_row = {"err_message": line["err_message"], "timestamp": timestamp}
+            # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
+            error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
 # {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
