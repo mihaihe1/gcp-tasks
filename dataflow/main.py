@@ -2,20 +2,21 @@ import apache_beam as beam
 import argparse
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
+from datetime import datetime
 
 SCHEMA = ",".join(
     [
-        "field1:STRING",
-        "field2:INTEGER",
-        "field3:FLOAT64",
-        "field4:TIMESTAMP",
+        "message:STRING",
+        "number_int:INTEGER",
+        "number_float:FLOAT64",
+        "timestamp:TIMESTAMP",
     ]
 )
 
 ERROR_SCHEMA = ",".join(
     [
-        "field1:STRING",
-        "field2:TIMESTAMP",
+        "err_message:STRING",
+        "timestamp:TIMESTAMP",
     ]
 )
 
@@ -25,20 +26,24 @@ class Parser(beam.DoFn):
 
     def process(self, line):
         try:
-            data_row = # parse json message according to table schema
+            # sp = line.split()
+            timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
+            data_row = {"message": line["message"], "number_int": int(line["number_int"]),
+                        "number_float": float(line["number_float"]),
+                        "timestamp": timestamp}
             yield data_row
         except Exception as error:
-            error_row = # parse json message according to ERRORS table schema
+            timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
+            error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
 
 def run(options, input_subscription, output_table, output_error_table):
-
     with beam.Pipeline(options=options) as pipeline:
         rows, error_rows = \
             (pipeline | 'Read from PubSub' >> beam.io.ReadFromPubSub(subscription=input_subscription)
              | 'Parse JSON messages' >> beam.ParDo(Parser()).with_outputs(Parser.ERROR_TAG,
-                                                                                main='rows')
+                                                                          main='rows')
              )
 
         _ = (rows | 'Write data to BigQuery'
@@ -61,13 +66,13 @@ def run(options, input_subscription, output_table, output_error_table):
 # if __name__ == '__main__':
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '--input_subscription', required=True,
+    '--input_subscription', default="/subscriptions/task-cf-370908/dataflow-topic-sub", required=True,
     help='Input PubSub subscription of the form "/subscriptions/<PROJECT>/<SUBSCRIPTION>".')
 parser.add_argument(
-    '--output_table', required=True,
+    '--output_table', default="task-cf-370908.dataflow.messages", required=True,
     help='Output BigQuery table for data')
 parser.add_argument(
-    '--output_error_table', required=True,
+    '--output_error_table', default="task-cf-370908.dataflow.errors", required=True,
     help='Output BigQuery table for errors')
 known_args, pipeline_args = parser.parse_known_args()
 pipeline_options = PipelineOptions(pipeline_args)
