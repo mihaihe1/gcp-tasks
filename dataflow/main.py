@@ -37,7 +37,7 @@ class Parser(beam.DoFn):
             error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
-
+# {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
 def run(options, input_subscription, output_table, output_error_table):
     with beam.Pipeline(options=options) as pipeline:
         rows, error_rows = \

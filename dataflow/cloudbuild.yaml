@@ -18,7 +18,7 @@ steps:
          "--runner=DataflowRunner",
 #         "--setup_file='dataflow/setup.py'",
          "--autoscaling_algorithm=NONE",
-         "--input_subscription=projects/task-cf-370908/subscriptions/task-cf-370908/dataflow-topic-sub",
+         "--input_subscription=projects/task-cf-370908/subscriptions/dataflow-topic-sub",
          "--output_table=task-cf-370908.dataflow.messages",
          "--output_error_table=task-cf-370908.dataflow.errors",
          "--streaming"
