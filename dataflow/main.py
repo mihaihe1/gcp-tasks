@@ -58,18 +58,18 @@ def run(options, input_subscription, output_table, output_error_table):
              )
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--input_subscription', required=True,
-        help='Input PubSub subscription of the form "/subscriptions/<PROJECT>/<SUBSCRIPTION>".')
-    parser.add_argument(
-        '--output_table', required=True,
-        help='Output BigQuery table for data')
-    parser.add_argument(
-        '--output_error_table', required=True,
-        help='Output BigQuery table for errors')
-    known_args, pipeline_args = parser.parse_known_args()
-    pipeline_options = PipelineOptions(pipeline_args)
-    pipeline_options.view_as(SetupOptions).save_main_session = True
-    run(pipeline_options, known_args.input_subscription, known_args.output_table, known_args.output_error_table)
+# if __name__ == '__main__':
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--input_subscription', required=True,
+    help='Input PubSub subscription of the form "/subscriptions/<PROJECT>/<SUBSCRIPTION>".')
+parser.add_argument(
+    '--output_table', required=True,
+    help='Output BigQuery table for data')
+parser.add_argument(
+    '--output_error_table', required=True,
+    help='Output BigQuery table for errors')
+known_args, pipeline_args = parser.parse_known_args()
+pipeline_options = PipelineOptions(pipeline_args)
+pipeline_options.view_as(SetupOptions).save_main_session = True
+run(pipeline_options, known_args.input_subscription, known_args.output_table, known_args.output_error_table)
