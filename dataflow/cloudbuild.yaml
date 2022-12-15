@@ -9,12 +9,12 @@ steps:
     name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
     entrypoint: 'python3'
     args: [ 'dataflow/main.py',
-         "--job_name=your_job_name",
-         "--project=your_project_id",
+         "--job_name=df-job",
+         "--project=task-cf-370908",
          "--region=us-east1",
-         "--template_location=gs://your_project_id-dataflow-templates/my-template/templates/template_test",
-         "--staging_location=gs://your_project_id-dataflow-templates/my-template/staging/",
-         "--temp_location=gs://your_project_id-dataflow-templates/my-template/temp/",
+         "--template_location=gs://task-cf-370908-dataflow-templates/my-template/templates/template_test",
+         "--staging_location=gs://task-cf-370908-dataflow-templates/my-template/staging/",
+         "--temp_location=gs://task-cf-370908-dataflow-templates/my-template/temp/",
          "--runner=DataflowRunner",
          "--setup_file='./setup.py'",
          "--autoscaling_algorithm=NONE",
