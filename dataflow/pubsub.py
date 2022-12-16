@@ -12,7 +12,7 @@ import datetime
 CREDENTIALS_PATH = "task-cf-370908-b6c7b96def5c.json"
 PROJECT_ID = "task-cf-370908"
 TOPIC_ID = "test-topic"
-MAX_MESSAGES = 10
+MAX_MESSAGES = 5
 
 # --- PubSub Utils Classes
 class PubSubPublisher:
@@ -51,7 +51,7 @@ def main():
                 "timestamp": now.strftime('%Y-%m-%d %H:%M:%S')
             }
         publisher.publish(json.dumps(data))
-        time.sleep(random.random())
+        time.sleep(1)
         i += 1
 
 if __name__ == "__main__":

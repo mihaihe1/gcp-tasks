@@ -5,7 +5,7 @@ from apache_beam.options.pipeline_options import SetupOptions
 from datetime import datetime
 import json
 import logging
-import datetime
+import datetime, time
 
 logging.basicConfig(level=logging.INFO)
 
@@ -29,7 +29,7 @@ ERROR_SCHEMA = ",".join(
 class Parser(beam.DoFn):
     ERROR_TAG = 'error'
 
-    def process(self, line, timestamp=beam.DoFn.TimestampParam):
+    def process(self, line):
         try:
             # sp = line.split()
             # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
@@ -57,6 +57,7 @@ class Parser(beam.DoFn):
             now = datetime.datetime.utcnow()
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             error_row = {"err_message": str(error), "timestamp": ts}
+            time.sleep(1)
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
             # yield {"err_message": str(error)}
 
