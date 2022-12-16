@@ -10,14 +10,14 @@ SCHEMA = ",".join(
         "message:STRING",
         "number_int:INTEGER",
         "number_float:FLOAT64",
-        "timestamp:TIMESTAMP",
+        # "timestamp:TIMESTAMP",
     ]
 )
 
 ERROR_SCHEMA = ",".join(
     [
         "err_message:STRING",
-        "timestamp:TIMESTAMP",
+        # "timestamp:TIMESTAMP",
     ]
 )
 
@@ -40,14 +40,15 @@ class Parser(beam.DoFn):
             yield {
                 "message": row["message"],
                 "number_int": int(row["number_int"]),
-                "number_float": float(row["number_float"]),
-                "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
+                "number_float": float(row["number_float"])
+                # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
             }
         except Exception as error:
             # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
             # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             print("ERROR")
-            error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
+            # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
+            error_row = {"err_message": "err_message"}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
 # {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
