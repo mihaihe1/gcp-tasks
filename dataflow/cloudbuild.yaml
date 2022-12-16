@@ -16,7 +16,6 @@ steps:
          "--staging_location=gs://task-cf-370908-dataflow-templates/my-template/staging/",
          "--temp_location=gs://task-cf-370908-dataflow-templates/my-template/temp/",
          "--runner=DataflowRunner",
-#         "--setup_file='dataflow/setup.py'",
          "--autoscaling_algorithm=NONE",
          "--input_subscription=projects/task-cf-370908/subscriptions/test-sub-1",
          "--output_table=task-cf-370908:dataflow.messages",

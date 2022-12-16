@@ -39,20 +39,20 @@ class Parser(beam.DoFn):
             # data_row = {"message": "test", "number_int": "1",
             #             "number_float": "2",
             #             "timestamp": "2022-12-15"}
-            # logging.info(f"MESSAGE, {row}")
-            # yield {
-            #     "message": row["message"],
-            #     "number_int": int(row["number_int"]),
-            #     "number_float": float(row["number_float"])
-            #     # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
-            # }
-            yield row
+            logging.info(f"MESSAGE, {row}")
+            yield {
+                "message": row["message"],
+                "number_int": int(row["number_int"]),
+                "number_float": float(row["number_float"])
+                # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
+            }
+            # yield row
         except Exception as error:
             # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
             # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             logging.info("ERROR")
             # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
-            error_row = {"err_message": "err_message"}
+            error_row = {"err_message": error}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
 # {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
