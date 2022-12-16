@@ -5,6 +5,7 @@ from apache_beam.options.pipeline_options import SetupOptions
 from datetime import datetime
 import json
 import logging
+import datetime
 
 logging.basicConfig(level=logging.INFO)
 
@@ -44,7 +45,7 @@ class Parser(beam.DoFn):
                 "message": row["message"],
                 "number_int": int(row["number_int"]),
                 "number_float": float(row["number_float"]),
-                "timestamp": timestamp.to_rfc3339()
+                "timestamp": row["timestamp"]
                 # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
             }
             # yield row
@@ -53,7 +54,9 @@ class Parser(beam.DoFn):
             # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             logging.info("ERROR")
             # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
-            error_row = {"err_message": str(error), "timestamp": timestamp.to_rfc3339()}
+            now = datetime.datetime.utcnow()
+            ts = now.strftime('%Y-%m-%d %H:%M:%S')
+            error_row = {"err_message": str(error), "timestamp": ts}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
             # yield {"err_message": str(error)}
 

@@ -6,6 +6,7 @@ from datetime import datetime
 import random
 from google.auth import jwt
 from google.cloud import pubsub_v1
+import datetime
 
 # --- Base variables and auth path
 CREDENTIALS_PATH = "task-cf-370908-b6c7b96def5c.json"
@@ -35,6 +36,7 @@ def main():
     i = 0
     publisher = PubSubPublisher(CREDENTIALS_PATH, PROJECT_ID, TOPIC_ID)
     while i < MAX_MESSAGES:
+        now = datetime.datetime.utcnow()
         if i in [1, 2]:
             data = {
                 "message": f"message-{i}",
@@ -45,7 +47,8 @@ def main():
             data = {
                 "message": f"message-{i}",
                 "number_int": random.randint(0, 10),
-                "number_float": random.random()
+                "number_float": random.random(),
+                "timestamp": now.strftime('%Y-%m-%d %H:%M:%S')
             }
         publisher.publish(json.dumps(data))
         time.sleep(random.random())
