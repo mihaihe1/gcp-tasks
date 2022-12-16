@@ -53,7 +53,7 @@ class Parser(beam.DoFn):
             logging.info("ERROR")
             # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
             error_row = {"err_message": error}
-            yield {"message": error}
+            yield {"err_message": str(error)}
 
 # {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
 # {"message", "test", "number_int":"1", "number_float":"2"}
