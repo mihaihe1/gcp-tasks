@@ -13,14 +13,14 @@ SCHEMA = ",".join(
         "message:STRING",
         "number_int:INTEGER",
         "number_float:FLOAT",
-        # "timestamp:TIMESTAMP",
+        "timestamp:TIMESTAMP",
     ]
 )
 
 ERROR_SCHEMA = ",".join(
     [
         "err_message:STRING",
-        # "timestamp:TIMESTAMP",
+        "timestamp:TIMESTAMP",
     ]
 )
 
@@ -28,7 +28,7 @@ ERROR_SCHEMA = ",".join(
 class Parser(beam.DoFn):
     ERROR_TAG = 'error'
 
-    def process(self, line):
+    def process(self, line, timestamp=beam.DoFn.TimestampParam):
         try:
             # sp = line.split()
             # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
@@ -43,7 +43,8 @@ class Parser(beam.DoFn):
             yield {
                 "message": row["message"],
                 "number_int": int(row["number_int"]),
-                "number_float": float(row["number_float"])
+                "number_float": float(row["number_float"]),
+                "timestamp": timestamp.to_rfc3339()
                 # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
             }
             # yield row
@@ -52,7 +53,7 @@ class Parser(beam.DoFn):
             # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             logging.info("ERROR")
             # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
-            error_row = {"err_message": str(error)}
+            error_row = {"err_message": str(error), "timestamp": timestamp.to_rfc3339()}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
             # yield {"err_message": str(error)}
 
