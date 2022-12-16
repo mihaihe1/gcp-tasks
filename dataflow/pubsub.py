@@ -1,5 +1,3 @@
-# requirements
-# google-cloud-pubsub==1.7.0
 import json
 import time
 from datetime import datetime
@@ -13,6 +11,8 @@ CREDENTIALS_PATH = "task-cf-370908-b6c7b96def5c.json"
 PROJECT_ID = "task-cf-370908"
 TOPIC_ID = "test-topic"
 MAX_MESSAGES = 5
+MAX_ERRORS = 2
+
 
 # --- PubSub Utils Classes
 class PubSubPublisher:
@@ -35,14 +35,20 @@ class PubSubPublisher:
 def main():
     i = 0
     publisher = PubSubPublisher(CREDENTIALS_PATH, PROJECT_ID, TOPIC_ID)
+
+    err_idx = set()
+
+    while len(err_idx) < MAX_ERRORS:
+        err_idx.add(random.randint(0, MAX_MESSAGES-1))
+
     while i < MAX_MESSAGES:
         now = datetime.datetime.utcnow()
-        if i in [1, 2]:
+        if i in err_idx:
             data = {
                 "message": f"message-{i}",
                 "number_int": "not an int",
                 "number_float": random.random()
-                    }
+            }
         else:
             data = {
                 "message": f"message-{i}",
@@ -53,6 +59,7 @@ def main():
         publisher.publish(json.dumps(data))
         time.sleep(1)
         i += 1
+
 
 if __name__ == "__main__":
     main()

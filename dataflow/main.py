@@ -5,7 +5,8 @@ from apache_beam.options.pipeline_options import SetupOptions
 from datetime import datetime
 import json
 import logging
-import datetime, time
+import datetime
+import time
 
 logging.basicConfig(level=logging.INFO)
 
@@ -31,35 +32,23 @@ class Parser(beam.DoFn):
 
     def process(self, line):
         try:
-            # sp = line.split()
-            # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
-            # data_row = {"message": line["message"], "number_int": int(line["number_int"]),
-            #             "number_float": float(line["number_float"]),
-            #             "timestamp": timestamp}
             row = json.loads(line.decode("utf-8"))
-            # data_row = {"message": "test", "number_int": "1",
-            #             "number_float": "2",
-            #             "timestamp": "2022-12-15"}
+
             logging.info(f"MESSAGE, {row}")
             yield {
                 "message": row["message"],
                 "number_int": int(row["number_int"]),
                 "number_float": float(row["number_float"]),
                 "timestamp": row["timestamp"]
-                # "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
             }
-            # yield row
         except Exception as error:
-            # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
-            # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
             logging.info("ERROR")
-            # error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
             now = datetime.datetime.utcnow()
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             error_row = {"err_message": str(error), "timestamp": ts}
             time.sleep(1)
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
-            # yield {"err_message": str(error)}
+
 
 # {"message", "test", "number_int":"1", "number_float":"2", "timestamp":"2022-12-15"}
 # {"message", "test", "number_int":"1", "number_float":"2"}
