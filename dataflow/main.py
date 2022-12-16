@@ -3,6 +3,7 @@ import argparse
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from datetime import datetime
+import json
 
 SCHEMA = ",".join(
     [
@@ -31,13 +32,21 @@ class Parser(beam.DoFn):
             # data_row = {"message": line["message"], "number_int": int(line["number_int"]),
             #             "number_float": float(line["number_float"]),
             #             "timestamp": timestamp}
-            data_row = {"message": "test", "number_int": "1",
-                        "number_float": "2",
-                        "timestamp": "2022-12-15"}
-            yield data_row
+            row = json.loads(line)
+            # data_row = {"message": "test", "number_int": "1",
+            #             "number_float": "2",
+            #             "timestamp": "2022-12-15"}
+            print("MESSAGE")
+            yield {
+                "message": row["message"],
+                "number_int": int(row["number_int"]),
+                "number_float": float(row["number_float"]),
+                "timestamp": datetime.strptime(row["timestamp"], '%Y-%m-%d')
+            }
         except Exception as error:
             # timestamp = datetime.strptime(line["timestamp"], '%Y-%m-%d')
             # error_row = {"err_message": line["err_message"], "timestamp": timestamp}
+            print("ERROR")
             error_row = {"err_message": "err_message", "timestamp": "2022-12-15"}
             yield beam.pvalue.TaggedOutput(self.ERROR_TAG, error_row)
 
