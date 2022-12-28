@@ -1,0 +1,56 @@
+substitutions:
+  _APP: 'task-cf'
+  _PY_DIR: 'task-cf/function'
+  _TF_DIR: 'task-cf'
+  _TF_ACTION: 'apply'
+
+steps:
+  - id: 'tf init'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform init -upgrade'
+
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform plan -out=plan.out'
+
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform apply plan.out'
+
+  - id: 'tf destroy'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform plan -destroy -out=plan.out'
+
+  - id: 'tf destroy plan'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform apply plan.out'
+
+#  - id: 'tf destroy'
+#    name: 'hashicorp/terraform:1.0.0'
+#    entrypoint: sh
+#    args:
+#      - '-c'
+#      - 'terraform destroy -auto-approve'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+#options:
+#  substitution_option: 'ALLOW_LOOSE'
+#tags: ['service-${_APP}-${_TF_ACTION}']
+# test test
