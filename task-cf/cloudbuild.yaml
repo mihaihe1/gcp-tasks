@@ -26,26 +26,19 @@ steps:
       - '-c'
       - 'terraform apply plan.out'
 
-  - id: 'tf destroy'
-    name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args:
-      - '-c'
-      - 'terraform plan -destroy -out=plan.out'
-
-  - id: 'tf destroy plan'
-    name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args:
-      - '-c'
-      - 'terraform apply plan.out'
-
 #  - id: 'tf destroy'
 #    name: 'hashicorp/terraform:1.0.0'
 #    entrypoint: sh
 #    args:
 #      - '-c'
-#      - 'terraform destroy -auto-approve'
+#      - 'terraform plan -destroy -out=plan.out'
+#
+#  - id: 'tf destroy plan'
+#    name: 'hashicorp/terraform:1.0.0'
+#    entrypoint: sh
+#    args:
+#      - '-c'
+#      - 'terraform apply plan.out'
 
   - id: "Activate virtual environment venv"
     name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
