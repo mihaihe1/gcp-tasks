@@ -9,7 +9,7 @@ import datetime
 # --- Base variables and auth path
 CREDENTIALS_PATH = "task-cf-370908-b6c7b96def5c.json"
 PROJECT_ID = "task-cf-370908"
-TOPIC_ID = "test-topic"
+TOPIC_ID = "topic"
 MAX_MESSAGES = 5
 MAX_ERRORS = 2
 
