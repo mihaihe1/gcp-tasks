@@ -64,7 +64,8 @@ steps:
          "--autoscaling_algorithm=NONE",
          "--input_subscription=projects/task-cf-370908/subscriptions/sub",
          "--output_table=task-cf-370908:dataflow.messages",
-         "--output_error_table=task-cf-370908:dataflow.errors"
+         "--output_error_table=task-cf-370908:dataflow.errors",
+         "--streaming"
          ]
     waitFor: [
       'Activate virtual environment venv', 'tf init', 'tf plan', 'tf apply'
