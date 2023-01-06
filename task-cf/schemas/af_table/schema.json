@@ -1,0 +1,22 @@
+[
+  {
+    "name": "message",
+    "type": "STRING"
+  },
+  {
+    "name": "number_int",
+    "type": "INTEGER"
+  },
+  {
+    "name": "number_float",
+    "type": "FLOAT"
+  },
+  {
+    "name": "timestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "name": "sum",
+    "type": "FLOAT"
+  }
+]

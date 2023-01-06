@@ -14,5 +14,9 @@
   {
     "name": "timestamp",
     "type": "TIMESTAMP"
+  },
+  {
+    "name": "sum",
+    "type": "FLOAT"
   }
 ]
