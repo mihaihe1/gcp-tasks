@@ -13,7 +13,7 @@ with DAG(
         "af_task_job",
         schedule_interval="0 * * * *",
         default_args={
-            'start_date': datetime(2022, 12, 27),
+            'start_date': datetime(2023, 1, 9),
             **DEFAULT_DAG_ARGS,
         },
 ) as dag:
