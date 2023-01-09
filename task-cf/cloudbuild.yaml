@@ -29,46 +29,46 @@ steps:
       - 'terraform apply plan.out'
     dir: 'task-cf'
 
-#  - id: 'tf destroy'
-#    name: 'hashicorp/terraform:1.0.0'
-#    entrypoint: sh
-#    args:
-#      - '-c'
-#      - 'terraform plan -destroy -out=plan.out'
-#    dir: 'task-cf'
+  - id: 'tf destroy'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform plan -destroy -out=plan.out'
+    dir: 'task-cf'
+
+  - id: 'tf destroy plan'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - 'terraform apply plan.out'
+    dir: 'task-cf'
+
+#  - id: "Activate virtual environment venv"
+#    name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
+#    entrypoint: '/bin/bash'
+#    args: [ '-c', 'source /venv/bin/activate' ]
 #
-#  - id: 'tf destroy plan'
-#    name: 'hashicorp/terraform:1.0.0'
-#    entrypoint: sh
-#    args:
-#      - '-c'
-#      - 'terraform apply plan.out'
-#    dir: 'task-cf'
-
-  - id: "Activate virtual environment venv"
-    name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
-    entrypoint: '/bin/bash'
-    args: [ '-c', 'source /venv/bin/activate' ]
-
-  - id: "Run Dataflow job"
-    name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
-    entrypoint: 'python3'
-    args: [ 'task-df/main.py',
-         "--job_name=df-job",
-         "--project=task-cf-370908",
-         "--region=us-east1",
-         "--staging_location=gs://task-cf-370908-dataflow-templates/my-template/staging/",
-         "--temp_location=gs://task-cf-370908-dataflow-templates/my-template/temp/",
-         "--runner=DataflowRunner",
-         "--autoscaling_algorithm=NONE",
-         "--input_subscription=projects/task-cf-370908/subscriptions/sub",
-         "--output_table=task-cf-370908:dataflow.messages",
-         "--output_error_table=task-cf-370908:dataflow.errors",
-         "--streaming"
-         ]
-    waitFor: [
-      'Activate virtual environment venv', 'tf init', 'tf plan', 'tf apply'
-      ]
+#  - id: "Run Dataflow job"
+#    name: 'gcr.io/task-cf-370908/dataflow-python3:latest'
+#    entrypoint: 'python3'
+#    args: [ 'task-df/main.py',
+#         "--job_name=df-job",
+#         "--project=task-cf-370908",
+#         "--region=us-east1",
+#         "--staging_location=gs://task-cf-370908-dataflow-templates/my-template/staging/",
+#         "--temp_location=gs://task-cf-370908-dataflow-templates/my-template/temp/",
+#         "--runner=DataflowRunner",
+#         "--autoscaling_algorithm=NONE",
+#         "--input_subscription=projects/task-cf-370908/subscriptions/sub",
+#         "--output_table=task-cf-370908:dataflow.messages",
+#         "--output_error_table=task-cf-370908:dataflow.errors",
+#         "--streaming"
+#         ]
+#    waitFor: [
+#      'Activate virtual environment venv', 'tf init', 'tf plan', 'tf apply'
+#      ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
